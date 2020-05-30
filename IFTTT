@@ -1,0 +1,26 @@
+int lightsensor = A3;
+int light;
+
+bool islight = false;
+
+void setup() {
+    Particle.variable("lightval", &light, INT);
+}
+
+void loop() {
+    light = analogRead(lightsensor);
+    Particle.publish("lightread", String(light));
+    
+    if(light >= 10 && !islight){
+        Particle.publish("There is Light!");
+        Particle.publish("light_on", "true");
+        islight = true;
+    }
+    
+    else if(light < 10 && islight){
+        Particle.publish("It's Dark!");
+        Particle.publish("light_off", "true");
+        islight = false;
+    }
+    delay(2000);
+}
